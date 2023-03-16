@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 
 bot = telebot.TeleBot(API_KEY)
 
+
 print('Starting up bot')
 
 def get_stock_price(stock_symbol):
@@ -23,7 +24,7 @@ def get_stock_price(stock_symbol):
   except:
     return "Error getting stock price for {}".format(stock_symbol)
 
-
+# credits: https://gist.github.com/SrNightmare09/c0492a8852eb172ebea6c93837837998
 def get_crypto_price(crypto_symbol):
   print("getting crypto data")  #check if data retrieval is correct
   try:
@@ -35,22 +36,28 @@ def get_crypto_price(crypto_symbol):
     response = session.get(url, params=parameters)
     text = response.json()
     price = text['data']['1']['quote']['USD']['price']
-    return price
+    percentage = text['data']['1']['quote']['USD']['percent_change_24h']
+    print(percentage)
+    listElem = [price, percentage]
+    print(listElem)
+    return listElem
   except:
     return "Error getting crypto price for {}".format(crypto_symbol)
 
 
-@bot.message_handler(func=lambda message: message.text[:2] == "$$")
+@bot.message_handler(func=lambda message: message.text and message.text.startswith('$$'))
 def handle_crypto_message(message):
   print("Handling crypto")
   print(message.text, message.text[2:])
   try:
     crypto_symbol = message.text[2:].upper()  # removes the "$$" symbols from the message
-    price = get_crypto_price(crypto_symbol)
+    elem = get_crypto_price(crypto_symbol)
+    price = elem[0]
+    percent = elem[1]
     current_time = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
     bot.send_message(
       message.chat.id,
-      "The current price of {} is ${:.2f} USD as at {} SGT".format(crypto_symbol, price, current_time))
+      "The price of {} is ${:.2f} USD as at {} SGT. The percentage change is {:.3f}% from 24hrs".format(crypto_symbol, price, current_time, percent))
   except:
     bot.send_message(
       message.chat.id,
@@ -72,12 +79,20 @@ def handle_stock_message(message):
       message.chat.id,
       "Invalid input format. Please input '$' followed by the ticker symbol.")
 
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.send_message(message.chat.id, "Hi there! I am a bot that can provide you with the current stock and crypto prices.\n"
+                     + "To get the stock price, please input '$' followed by the ticker symbol. To get the crypto price, please input '$$' followed by the cryptocurrency symbol. For example, *'$$BTC'*.\n"
+                     + "More commands will be added if time permits:)\n"
+                     + "*Commands*\n"
+                     + "- /chart $[symbol] Plot of the stocks movement for the past 1 month. 📊\n- /cap $[symbol] Market Capitalization of symbol. 💰\n- /help Get some help using the bot.🆘\n", parse_mode= 'Markdown' )
 
 @bot.message_handler(commands=['help'])
 def help(message):
   bot.send_message(
     message.chat.id,
-    "To get the stock price, please input '$' followed by the ticker symbol.")
+    "To get the stock price, please input '$' followed by the ticker symbol e.g. $spy\n"
+    + "To get the cryptocurrency price, please input '$$' followed by the ticker symbol. e.g. $$btc")
 
 
 @bot.message_handler(commands=['hello'])
