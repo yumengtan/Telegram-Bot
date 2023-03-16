@@ -3,8 +3,13 @@ import telebot
 import requests
 import datetime
 import pytz
+import os
 from requests import Session
 from bs4 import BeautifulSoup
+
+
+API_KEY = os.getenviron('API_KEY')
+COIN_API_KEY = os.getenviron('COIN_API_KEY')
 
 bot = telebot.TeleBot(API_KEY)
 
@@ -108,7 +113,6 @@ def marketcap(message):
         # Send the market cap back to the user
         #bot.reply_to(message, f"The market cap for {symbol} is {market_cap}.")
     elif user_message.startswith('$$'):
-        print("here")
         crypto_symbol = user_message[2:].upper()
         print(crypto_symbol)
         # Call the function to get the market cap for the crypto symbol
@@ -127,7 +131,7 @@ def start(message):
                      + "To get the stock price, please input '$' followed by the ticker symbol. To get the crypto price, please input '$$' followed by the cryptocurrency symbol. For example, *'$$BTC'*.\n"
                      + "More commands will be added if time permits:)\n"
                      + "*Commands*\n"
-                     + "- /chart $[symbol] Plot of the stocks movement for the past 1 month. 📊\n- /cap $[symbol] Market Capitalization of symbol. 💰\n- /help Get some help using the bot.🆘\n", parse_mode= 'Markdown' )
+                     + "- /chart $[symbol] Plot of the stocks movement for the past 1 month. 📊\n- /mcap $[symbol] Market Capitalization of symbol. 💰\n- /help Get some help using the bot.🆘\n", parse_mode= 'Markdown' )
 
 @bot.message_handler(commands=['help'])
 def help(message):
