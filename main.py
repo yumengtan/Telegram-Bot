@@ -1,4 +1,4 @@
-from secret import API_KEY, COIN_API_KEY
+#from secret import API_KEY, COIN_API_KEY
 import telebot
 import requests
 import datetime
