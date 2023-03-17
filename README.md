@@ -1,4 +1,4 @@
-# Telegram-Bot. 
+# Telegram-Bot 
 ## https://t.me/Stockz_alertz_bot
 A simple telegram bot which provides basic information for stocks and cryptocurrencies. <br />
 Hosted on Heroku. <br />
