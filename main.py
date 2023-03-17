@@ -104,7 +104,7 @@ def handle_stock_message(message):
 def marketcap(message):
     user_message = message.text[6:]
     print(user_message[0])
-    
+
     if not user_message:
         bot.reply_to(message, "Please provide a stock or crypto symbol after the /mcap command.")
         return
