@@ -8,8 +8,8 @@ from requests import Session
 from bs4 import BeautifulSoup
 
 
-API_KEY = os.getenviron('API_KEY')
-COIN_API_KEY = os.getenviron('COIN_API_KEY')
+API_KEY = os.environ.get('API_KEY')
+COIN_API_KEY = os.environ.get('COIN_API_KEY')
 
 bot = telebot.TeleBot(API_KEY)
 
