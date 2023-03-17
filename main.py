@@ -116,7 +116,7 @@ def marketcap(message):
         crypto_symbol = user_message[2:].upper()
         print(crypto_symbol)
         # Call the function to get the market cap for the crypto symbol
-        market_cap = int(get_crypto_marketcap(crypto_symbol))
+        market_cap = get_crypto_marketcap(crypto_symbol)
 
         # Send the market cap back to the user
         bot.reply_to(message, f"The market cap for {crypto_symbol} is {market_cap}.")
