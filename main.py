@@ -104,7 +104,12 @@ def handle_stock_message(message):
 def marketcap(message):
     user_message = message.text[6:]
     print(user_message[0])
-    if user_message.startswith('!$'):
+    
+    if not user_message:
+        bot.reply_to(message, "Please provide a stock or crypto symbol after the /mcap command.")
+        return
+    
+    elif user_message.startswith('!$'):
 
         stock_symbol = user_message[1:].upper()
 
