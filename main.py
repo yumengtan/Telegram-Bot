@@ -13,7 +13,8 @@ COIN_API_KEY = os.environ.get('COIN_API_KEY')
 
 bot = telebot.TeleBot(API_KEY)
 
-
+print(API_KEY)
+print(COIN_API_KEY)
 print('Starting up bot')
 
 def get_stock_price(stock_symbol):
@@ -40,6 +41,7 @@ def get_crypto_price(crypto_symbol):
     session.headers.update(headers)
     response = session.get(url, params=parameters)
     text = response.json()
+    print(text)
     price = text['data'][crypto_symbol]['quote']['USD']['price']
     percentage = text['data'][crypto_symbol]['quote']['USD']['percent_change_24h']
     listElem = [price, percentage]
