@@ -7,9 +7,10 @@ import os
 from requests import Session
 
 
-
 API_KEY = os.environ.get('API_KEY')
 COIN_API_KEY = os.environ.get('COIN_API_KEY')
+STOCK_API_KEY = os.environ.get('STOCK_API_KEY')
+
 
 bot = telebot.TeleBot(API_KEY)
 
