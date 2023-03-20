@@ -120,7 +120,7 @@ def handle_stock_message(message):
                 message.chat.id,
                 "The market is currently closed. The last known price of {} is ${:.4f}.".format(stock_symbol, price))
     else: 
-      if current_time < market_open:
+      if current_time < market_open and current_time > market_close:
          market_status = "premarket"
       elif current_time > market_close and current_time < market_open:
          market_status = "aftermarket"
