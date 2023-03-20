@@ -96,8 +96,8 @@ def handle_stock_message(message):
     elem = get_stock_price(stock_symbol)
     price = elem[0]
     percent = elem[1]
-    current_time = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
-    current_time = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
+    tz_sg = pytz.timezone('Asia/Singapore')
+    current_time = datetime.datetime.now(tz_sg)
     market_open = current_time.replace(hour=21, minute=30, second=0, microsecond=0)
     market_close = current_time.replace(hour=4, minute=0, second=0, microsecond=0)
     market_close_start = current_time.replace(hour=8, minute=0, second=0, microsecond=0)
@@ -108,6 +108,7 @@ def handle_stock_message(message):
                 "The market is currently closed. The last known price of {} is ${:.4f}.".format(stock_symbol, price)
             )
     else:
+      print("reached here")
       if current_time < market_open:
          market_status = "premarket"
       elif current_time > market_close:
