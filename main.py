@@ -109,6 +109,7 @@ def handle_stock_message(message):
             )
     else:
       print("reached here")
+      current_time = current_time.strftime('%I:%M %p')
       if current_time < market_open:
          market_status = "premarket"
       elif current_time > market_close:
@@ -116,11 +117,11 @@ def handle_stock_message(message):
       else:
          market_status = "regular trading"
       if percent > 0:
-        message_text = f"The price of {stock_symbol} is ${price:.4f} USD as at {current_time.strftime('%I:%M %p')} SGT ({market_status}). The stock is up {percent:.4f}% from 24hrs."
+       bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
       else:
-        message_text = f"The price of {stock_symbol} is ${price:.4f} USD as at {current_time.strftime('%I:%M %p')} SGT ({market_status}). The stock is down {abs(percent):.4f}% from 24hrs."
-      print(message_text)
-      bot.send_message(message.chat.id, message_text)
+        percent = abs(percent)
+        bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is down {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
+
   except:
     bot.send_message(
       message.chat.id,
