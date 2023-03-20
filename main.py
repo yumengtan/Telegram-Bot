@@ -38,6 +38,7 @@ def get_stock_marketcap(stock_symbol):
     response = requests.get(url)
     text = response.json()
     marketcap = text['MarketCapitalization']
+    print(marketcap)
     return marketcap
   except:
     return "Error getting stock marketcap for {}".format(stock_symbol)
@@ -145,12 +146,6 @@ def marketcap(message):
         bot.reply_to(message, "Please provide a stock or crypto symbol after the /mcap command.")
         return
     
-    elif user_message.startswith('$'):
-        stock_symbol = user_message[1:].upper()
-        market_cap = get_stock_marketcap(stock_symbol)
-        # Send the market cap back to the user
-        bot.reply_to(message, f"The market cap for {stock_symbol} is {market_cap}.")
-
     elif len(user_message) > 1 and user_message.startswith('$$'):
         crypto_symbol = user_message[2:].upper()
         print(crypto_symbol)
@@ -159,6 +154,13 @@ def marketcap(message):
 
         # Send the market cap back to the user
         bot.reply_to(message, f"The market cap for {crypto_symbol} is ${market_cap}.")
+
+    elif user_message.startswith('$'):
+        stock_symbol = user_message[1:]
+        market_cap = get_stock_marketcap(stock_symbol)
+        # Send the market cap back to the user
+        bot.reply_to(message, f"The market cap for {stock_symbol} is {market_cap}.")
+
 
     else:
         # Send an error message back to the user
