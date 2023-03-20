@@ -107,7 +107,6 @@ def handle_stock_message(message):
   try:
     stock_symbol = message.text[1:]  # removes the "$" symbol from the message
     elem = get_stock_price(stock_symbol)
-    print(elem)
     price = elem[0]
     percent = elem[1]
     tz_sg = pytz.timezone('Asia/Singapore')
@@ -128,7 +127,6 @@ def handle_stock_message(message):
       else:
          market_status = "regular trading"
       current = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
-      #message_text = f"The price of {stock_symbol} is ${price:.4f} USD as at {current} SGT ({market_status}). The stock is down {percent:.4f}% from 24hrs."
       if percent >= 0:
 
         bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs".format(stock_symbol, price, current, market_status, percent))
@@ -163,7 +161,11 @@ def marketcap(message):
         stock_symbol = user_message[1:]
         market_cap = get_stock_marketcap(stock_symbol)
         # Send the market cap back to the user
-        bot.reply_to(message, f"The market cap for {stock_symbol} is {market_cap}.")
+        if marketcap == {}:
+           bot.reply_to(message, f"There is no available data for this symbol.")
+
+        else:
+           bot.reply_to(message, f"The market cap for {stock_symbol} is ${market_cap}.")
 
 
     else:
