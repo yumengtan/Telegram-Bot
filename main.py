@@ -118,8 +118,7 @@ def handle_stock_message(message):
     if current_time < market_close_end and current_time > market_close_start:
             bot.send_message(
                 message.chat.id,
-                "The market is currently closed. The last known price of {} is ${:.4f}.".format(stock_symbol, price)
-            )
+                "The market is currently closed. The last known price of {} is ${:.4f}.".format(stock_symbol, price))
     else:
       print(percent)    
       if current_time < market_open:
@@ -128,6 +127,7 @@ def handle_stock_message(message):
          market_status = "aftermarket"
       else:
          market_status = "regular trading"
+         print(current_time)
       if percent >= 0:
         bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
       else:
