@@ -116,17 +116,15 @@ def handle_stock_message(message):
          market_status = "aftermarket"
       else:
          market_status = "regular trading"
-      try:
-        print(percent)
-        if percent > 0:
-          print("positive percentage")
-          bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
-        else:
-          print("negative percentage")
-          percent = abs(percent)
-          bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is down {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
-      except Exception as e:
-        print(e)
+      print(percent)
+      print(market_status)
+      if percent > 0:
+        print("positive percentage")
+        bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
+      else:
+        print("negative percentage")
+        percent = abs(percent)
+        bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is down {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
 
   except:
     bot.send_message(
