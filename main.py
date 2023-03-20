@@ -118,8 +118,9 @@ def handle_stock_message(message):
       else:
          market_status = "regular trading"
       print(market_status)
-      current_time = current_time.strftime('%I:%M %p')
-      if percent > 0:
+      print(current_time)
+      #current_time = current_time.strftime('%I:%M %p')
+      if percent >= 0:
         print("positive percentage")
         bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
       else:
