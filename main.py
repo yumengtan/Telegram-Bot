@@ -119,23 +119,23 @@ def handle_stock_message(message):
             bot.send_message(
                 message.chat.id,
                 "The market is currently closed. The last known price of {} is ${:.4f}.".format(stock_symbol, price))
-    else:
-      print(percent)    
+    else: 
       if current_time < market_open:
          market_status = "premarket"
       elif current_time > market_close:
          market_status = "aftermarket"
       else:
          market_status = "regular trading"
-      current_time = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
+      current = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
       print("reached here")
+      print(type(percent))
       if percent >= 0:
         print("positive")
-        bot.send_message("The price of {} is ${:.2f} USD as at {} SGT ({}). The percentage change is {:.4f}% from 24hrs".format(stock_symbol, price, current_time, market_status, percent))
+        bot.send_message("The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs".format(stock_symbol, price, current, market_status, percent))
       else:
         print("negative")
         percent = abs(percent)
-        bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is down {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
+        bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is down {:.4f}% from 24hrs.".format(stock_symbol, price, current, market_status, percent))
 
   except:
     bot.send_message(
