@@ -162,11 +162,10 @@ def marketcap(message):
         market_cap = get_stock_marketcap(stock_symbol)
         print(market_cap)
         # Send the market cap back to the user
-        if marketcap == NULL:
-           print("here")
-           bot.reply_to(message, "There is no available data for this symbol.")
-        else:
+        if marketcap:
            bot.reply_to(message, f"The market cap for {stock_symbol} is ${market_cap}.")
+        else:
+           bot.reply_to(message, "There is no available data for this symbol.")
 
 
     else:
