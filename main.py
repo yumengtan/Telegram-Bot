@@ -119,10 +119,8 @@ def handle_stock_message(message):
         message_text = f"The price of {stock_symbol} is ${price:.4f} USD as at {current_time.strftime('%I:%M %p')} SGT ({market_status}). The stock is up {percent:.4f}% from 24hrs."
       else:
         message_text = f"The price of {stock_symbol} is ${price:.4f} USD as at {current_time.strftime('%I:%M %p')} SGT ({market_status}). The stock is down {abs(percent):.4f}% from 24hrs."
-      bot.send_message(
-                message.chat.id,
-                message_text
-            )
+      print(message_text)
+      bot.send_message(message.chat.id, message_text)
   except:
     bot.send_message(
       message.chat.id,
