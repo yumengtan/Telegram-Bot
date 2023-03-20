@@ -24,7 +24,8 @@ def get_stock_price(stock_symbol):
     text = response.json()
     price = text['Global Quote']['05. price']
     percentage = text['Global Quote']['10. change percent']
-    percentage = percentage.rstrip(percentage[-1])
+    percentage = float(percentage.rstrip(percentage[-1]))
+    price = float(price)
     listElem = [price, percentage]
     print(listElem)
     return listElem 
@@ -39,7 +40,7 @@ def get_stock_marketcap(stock_symbol):
     text = response.json()
     print(text)
     marketcap = text['MarketCapitalization']
-    print(marketcap)
+    marketcap = int(marketcap)
     return marketcap
   except:
     return "Error getting stock marketcap for {}".format(stock_symbol)
@@ -127,17 +128,12 @@ def handle_stock_message(message):
       else:
          market_status = "regular trading"
       current = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
-      print(current)
-      price = float(price)
-      percent = float(percent)
-      damessage = f"The price of {stock_symbol} is ${price:.4f} USD as at {current} SGT ({market_status}). The stock is down {percent:.4f}% from 24hrs."
-      print(damessage)
-      print("no")
+      #message_text = f"The price of {stock_symbol} is ${price:.4f} USD as at {current} SGT ({market_status}). The stock is down {percent:.4f}% from 24hrs."
       if percent >= 0:
-        print("positive")
-        bot.send_message("The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs".format(stock_symbol, price, current, market_status, percent))
+
+        bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs".format(stock_symbol, price, current, market_status, percent))
       else:
-        print("negative")
+
         percent = abs(percent)
         bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is down {:.4f}% from 24hrs.".format(stock_symbol, price, current, market_status, percent))
 
