@@ -160,8 +160,9 @@ def marketcap(message):
     elif user_message.startswith('$'):
         stock_symbol = user_message[1:]
         market_cap = get_stock_marketcap(stock_symbol)
+        print(market_cap)
         # Send the market cap back to the user
-        if marketcap == {}:
+        if marketcap == NULL:
            print("here")
            bot.reply_to(message, "There is no available data for this symbol.")
         else:
