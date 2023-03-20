@@ -19,7 +19,8 @@ print('Starting up bot')
 def get_stock_price(stock_symbol):
   print("getting stock data for " + stock_symbol)  #check if data retrieval is correct
   try:
-    url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey={STOCK_API_KEY}'.format(STOCK_API_KEY)
+    print(STOCK_API_KEY)
+    url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey={}'.format(STOCK_API_KEY)
     response = requests.get(url)
     text = response.json()
     price = text['Global Quote']['05. price']
