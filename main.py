@@ -94,6 +94,7 @@ def handle_stock_message(message):
   try:
     stock_symbol = message.text[1:]  # removes the "$" symbol from the message
     elem = get_stock_price(stock_symbol)
+    print(elem)
     price = elem[0]
     percent = elem[1]
     tz_sg = pytz.timezone('Asia/Singapore')
@@ -116,6 +117,7 @@ def handle_stock_message(message):
       else:
          market_status = "regular trading"
       try:
+        print(percent)
         if percent > 0:
           print("positive percentage")
           bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
