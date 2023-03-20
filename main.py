@@ -108,7 +108,9 @@ def handle_stock_message(message):
                 message.chat.id,
                 "The market is currently closed. The last known price of {} is ${:.4f}.".format(stock_symbol, price)
             )
-    else:    
+    else:
+      print("reached else case")
+      print(percent)    
       current_time = current_time.strftime('%I:%M %p')
       if current_time < market_open:
          market_status = "premarket"
@@ -116,7 +118,6 @@ def handle_stock_message(message):
          market_status = "aftermarket"
       else:
          market_status = "regular trading"
-      print(percent)
       print(market_status)
       if percent > 0:
         print("positive percentage")
