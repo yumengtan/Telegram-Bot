@@ -19,8 +19,7 @@ print('Starting up bot')
 def get_stock_price(stock_symbol):
   print("getting stock data for " + stock_symbol)  #check if data retrieval is correct
   try:
-    print(STOCK_API_KEY)
-    url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey={}'.format(STOCK_API_KEY)
+    url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={}&apikey={}'.format(stock_symbol, STOCK_API_KEY)
     response = requests.get(url)
     text = response.json()
     price = text['Global Quote']['05. price']
@@ -94,10 +93,35 @@ def handle_stock_message(message):
   print("Handling stock")
   try:
     stock_symbol = message.text[1:]  # removes the "$" symbol from the message
-    price = get_stock_price(stock_symbol)
-    bot.send_message(
-      message.chat.id,
-      "The current price of {} is ${}".format(stock_symbol, price))
+    elem = get_stock_price(stock_symbol)
+    price = elem[0]
+    percent = elem[1]
+    current_time = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
+    current_time = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
+    market_open = current_time.replace(hour=21, minute=30, second=0, microsecond=0)
+    market_close = current_time.replace(hour=4, minute=0, second=0, microsecond=0)
+    market_close_start = current_time.replace(hour=8, minute=0, second=0, microsecond=0)
+    market_close_end = current_time.replace(hour=16, minute=0, second=0, microsecond=0)
+    if current_time < market_close_end and current_time > market_close_start:
+            bot.send_message(
+                message.chat.id,
+                "The market is currently closed. The last known price of {} is ${:.4f}.".format(stock_symbol, price)
+            )
+    else:
+      if current_time < market_open:
+         market_status = "premarket"
+      elif current_time > market_close:
+         market_status = "aftermarket"
+      else:
+         market_status = "regular trading"
+      if percent > 0:
+        message_text = f"The price of {stock_symbol} is ${price:.4f} USD as at {current_time.strftime('%I:%M %p')} SGT ({market_status}). The stock is up {percent:.4f}% from 24hrs."
+      else:
+        message_text = f"The price of {stock_symbol} is ${price:.4f} USD as at {current_time.strftime('%I:%M %p')} SGT ({market_status}). The stock is down {abs(percent):.4f}% from 24hrs."
+      bot.send_message(
+                message.chat.id,
+                message_text
+            )
   except:
     bot.send_message(
       message.chat.id,
