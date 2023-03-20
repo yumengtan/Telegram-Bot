@@ -38,7 +38,7 @@ def get_stock_marketcap(stock_symbol):
     url = 'https://www.alphavantage.co/query?function=OVERVIEW&symbol={}&apikey={}'.format(stock_symbol, STOCK_API_KEY)
     response = requests.get(url)
     text = response.json()
-    print(text)
+    #print(text)
     marketcap = text['MarketCapitalization']
     marketcap = int(marketcap)
     return marketcap
