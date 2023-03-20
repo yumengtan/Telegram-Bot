@@ -128,6 +128,7 @@ def handle_stock_message(message):
       else:
          market_status = "regular trading"
       current_time = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
+      print("reached here")
       if percent >= 0:
         print("positive" + percent)
         bot.send_message("The price of {} is ${:.2f} USD as at {} SGT ({}). The percentage change is {:.4f}% from 24hrs".format(stock_symbol, price, current_time, market_status, percent))
