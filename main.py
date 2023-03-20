@@ -17,7 +17,7 @@ bot = telebot.TeleBot(API_KEY)
 print('Starting up bot')
 
 def get_stock_price(stock_symbol):
-  print("getting stock data for " + stock_symbol)  #check if data retrieval is correct
+  print("getting stock price for " + stock_symbol)  #check if data retrieval is correct
   try:
     url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={}&apikey={}'.format(stock_symbol, STOCK_API_KEY)
     response = requests.get(url)
@@ -31,9 +31,20 @@ def get_stock_price(stock_symbol):
   except:
     return "Error getting stock price for {}".format(stock_symbol)
 
+def get_stock_marketcap(stock_symbol):
+  print("getting stock marketcap for " + stock_symbol)  #check if data retrieval is correct
+  try:
+    url = 'https://www.alphavantage.co/query?function=OVERVIEW&symbol={}&apikey={}'.format(stock_symbol, STOCK_API_KEY)
+    response = requests.get(url)
+    text = response.json()
+    marketcap = text['MarketCapitalization']
+    return marketcap
+  except:
+    return "Error getting stock marketcap for {}".format(stock_symbol)
+
 # credits: https://gist.github.com/SrNightmare09/c0492a8852eb172ebea6c93837837998
 def get_crypto_price(crypto_symbol):
-  print("getting crypto data for " + crypto_symbol)  #check if data retrieval is correct
+  print("getting crypto price for " + crypto_symbol)  #check if data retrieval is correct
   try:
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
     parameters = { 'symbol': crypto_symbol, 'convert': 'USD' } # API parameters to pass in for retrieving specific cryptocurrency data 
@@ -52,9 +63,8 @@ def get_crypto_price(crypto_symbol):
     return "Error getting crypto price for {}".format(crypto_symbol)
 
 def get_crypto_marketcap(crypto_symbol):
-  print("Getting crypto mcap")
+  print("Getting crypto mcap for " + crypto_symbol) #check if data retrieval is correct
   try:
-    print("getting market cap for " + crypto_symbol)
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
     parameters = { 'symbol': crypto_symbol, 'convert': 'USD' } # API parameters to pass in for retrieving specific cryptocurrency data 
     headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': COIN_API_KEY}
@@ -109,7 +119,6 @@ def handle_stock_message(message):
                 "The market is currently closed. The last known price of {} is ${:.4f}.".format(stock_symbol, price)
             )
     else:
-      print("reached else case")
       print(percent)    
       if current_time < market_open:
          market_status = "premarket"
@@ -117,14 +126,9 @@ def handle_stock_message(message):
          market_status = "aftermarket"
       else:
          market_status = "regular trading"
-      print(market_status)
-      print(current_time)
-      #current_time = current_time.strftime('%I:%M %p')
       if percent >= 0:
-        print("positive percentage")
         bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is up {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
       else:
-        print("negative percentage")
         percent = abs(percent)
         bot.send_message(message.chat.id, "The price of {} is ${:.2f} USD as at {} SGT ({}). The stock is down {:.4f}% from 24hrs.".format(stock_symbol, price, current_time, market_status, percent))
 
@@ -143,14 +147,13 @@ def marketcap(message):
         bot.reply_to(message, "Please provide a stock or crypto symbol after the /mcap command.")
         return
     
-    elif user_message.startswith('!$'):
-
+    elif user_message.startswith('$'):
         stock_symbol = user_message[1:].upper()
-        #market_cap = get_stock_market_cap(symbol)
+        market_cap = get_stock_marketcap(stock_symbol)
         # Send the market cap back to the user
-        #bot.reply_to(message, f"The market cap for {symbol} is {market_cap}.")
+        bot.reply_to(message, f"The market cap for {stock_symbol} is {market_cap}.")
 
-    elif user_message.startswith('$$'):
+    elif len(user_message) > 1 and user_message.startswith('$$'):
         crypto_symbol = user_message[2:].upper()
         print(crypto_symbol)
         # Call the function to get the market cap for the crypto symbol
