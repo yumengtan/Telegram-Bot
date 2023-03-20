@@ -5,7 +5,7 @@ import datetime
 import pytz
 import os
 from requests import Session
-from bs4 import BeautifulSoup
+
 
 
 API_KEY = os.environ.get('API_KEY')
@@ -18,12 +18,15 @@ print('Starting up bot')
 def get_stock_price(stock_symbol):
   print("getting stock data for " + stock_symbol)  #check if data retrieval is correct
   try:
-    url = "https://finance.yahoo.com/quote/{}".format(stock_symbol)
+    url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey={STOCK_API_KEY}'.format(STOCK_API_KEY)
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    price_element = soup.find(
-      "span", {"class": "Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)"})
-    return price_element.text
+    text = response.json()
+    price = text['Global Quote']['05. price']
+    percentage = text['Global Quote']['10. change percent']
+    percentage = percentage.rstrip(percentage[-1])
+    listElem = [price, percentage]
+    print(listElem)
+    return listElem 
   except:
     return "Error getting stock price for {}".format(stock_symbol)
 
