@@ -122,7 +122,7 @@ def handle_stock_message(message):
     else: 
       if current_time < market_open:
          market_status = "premarket"
-      elif current_time > market_close:
+      elif current_time > market_close and current_time < market_open:
          market_status = "aftermarket"
       else:
          market_status = "regular trading"
