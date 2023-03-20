@@ -128,8 +128,9 @@ def handle_stock_message(message):
          market_status = "regular trading"
       current = datetime.datetime.now(pytz.timezone('Asia/Singapore')).strftime("%I:%M %p") #time in SGT 12hr format
       print(current)
+      price = float(price)
       percent = float(percent)
-      damessage = f"The price of {stock_symbol} is ${price:.4f} USD as at {current_time} SGT ({market_status}). The stock is down {abs(percent):.4f}% from 24hrs."
+      damessage = f"The price of {stock_symbol} is ${price:.4f} USD as at {current} SGT ({market_status}). The stock is down {percent:.4f}% from 24hrs."
       print(damessage)
       print("no")
       if percent >= 0:
